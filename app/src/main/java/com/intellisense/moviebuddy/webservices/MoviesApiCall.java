@@ -1,9 +1,11 @@
 package com.intellisense.moviebuddy.webservices;
 
 
-import com.intellisense.moviebuddy.models.MovieItem;
+import com.intellisense.moviebuddy.models.MovieItems;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,11 +20,15 @@ public interface MoviesApiCall {
     String mBaseUrl = "https://api.themoviedb.org/";
 
     @GET("3/movie/now_playing?page=1&api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
-    Call<ResponseBody> getMoviesList();
-
+    Call<MovieItems> getMoviesList();
+    //HTTP Client - OKHTTP 3
+    OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
+    OkHttpClient httpClient = builder.build();
 
     Retrofit mRetrofit = new Retrofit.Builder()
             .baseUrl(mBaseUrl)
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
 }

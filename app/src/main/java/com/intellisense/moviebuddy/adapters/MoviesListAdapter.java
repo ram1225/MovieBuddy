@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.intellisense.moviebuddy.R;
-import com.intellisense.moviebuddy.models.MovieItem;
+import com.intellisense.moviebuddy.models.MovieItems;
+import com.intellisense.moviebuddy.models.ResultsItem;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ import java.util.List;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder> {
     private Context context;
-    private List<MovieItem> mMovieItems;
+    private List<ResultsItem> mMovieItems=new ArrayList<>();
 
     public MoviesListAdapter(Context context) {
         this.context = context;
@@ -38,7 +40,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             mMoviePosterPath = (ImageView) view.findViewById(R.id.movie_image);
         }
     }
-
+    public void setData(List<ResultsItem> mMovieItems) {
+        this.mMovieItems = mMovieItems;
+        notifyDataSetChanged();
+    }
     @Override
     public MoviesListAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -48,9 +53,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     @Override
     public void onBindViewHolder(MoviesViewHolder holder, int position) {
-        MovieItem mMovieItem = mMovieItems.get(position);
-        holder.mMovieTitle.setText(mMovieItem.getMovieTitle());
-        Picasso.with(this.context).load(mMovieItem.getMoviePosterPath()).into(holder.mMoviePosterPath);
+        ResultsItem mMovieItem = mMovieItems.get(position);
+        holder.mMovieTitle.setText(mMovieItem.getTitle());
+        Picasso.with(this.context).load("http://image.tmdb.org/t/p/w342/"+mMovieItem.getPosterPath()+"?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed").into(holder.mMoviePosterPath);
     }
 
     @Override
