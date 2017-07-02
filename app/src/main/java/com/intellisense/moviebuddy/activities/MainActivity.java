@@ -12,22 +12,25 @@ import com.intellisense.moviebuddy.adapters.MoviesListAdapter;
 import com.intellisense.moviebuddy.models.MovieItems;
 import com.intellisense.moviebuddy.webservices.MoviesApiCall;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private MoviesListAdapter mMoviesListAdapter;
+    @BindView(R.id.movies_recycler_view)
+     RecyclerView mRecyclerView;
+     MoviesListAdapter mMoviesListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        //   mRecyclerView = (RecyclerView) findViewById(R.id.movies_recycler_view);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.movies_recycler_view);
-
-        mMoviesListAdapter=new MoviesListAdapter(getApplicationContext());
+        mMoviesListAdapter = new MoviesListAdapter(getApplicationContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());

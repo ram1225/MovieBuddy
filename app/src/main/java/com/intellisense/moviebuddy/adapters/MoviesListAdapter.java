@@ -16,13 +16,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Home on 7/1/2017.
  */
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder> {
     private Context context;
-    private List<ResultsItem> mMovieItems=new ArrayList<>();
+    private List<ResultsItem> mMovieItems = new ArrayList<>();
 
     public MoviesListAdapter(Context context) {
         this.context = context;
@@ -30,20 +33,24 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     public class MoviesViewHolder extends RecyclerView.ViewHolder {
 
-
+        @BindView(R.id.movie_name)
         public TextView mMovieTitle;
+        @BindView(R.id.movie_image)
         public ImageView mMoviePosterPath;
 
         public MoviesViewHolder(View view) {
             super(view);
-            mMovieTitle = (TextView) view.findViewById(R.id.movie_name);
-            mMoviePosterPath = (ImageView) view.findViewById(R.id.movie_image);
+            ButterKnife.bind(this,view);
+            // mMovieTitle = (TextView) view.findViewById(R.id.movie_name);
+            //mMoviePosterPath = (ImageView) view.findViewById(R.id.movie_image);
         }
     }
+
     public void setData(List<ResultsItem> mMovieItems) {
         this.mMovieItems = mMovieItems;
         notifyDataSetChanged();
     }
+
     @Override
     public MoviesListAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -55,7 +62,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
     public void onBindViewHolder(MoviesViewHolder holder, int position) {
         ResultsItem mMovieItem = mMovieItems.get(position);
         holder.mMovieTitle.setText(mMovieItem.getTitle());
-        Picasso.with(this.context).load("http://image.tmdb.org/t/p/w342/"+mMovieItem.getPosterPath()+"?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed").into(holder.mMoviePosterPath);
+        Picasso.with(this.context).load("http://image.tmdb.org/t/p/w342/" + mMovieItem.getPosterPath() + "?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed").into(holder.mMoviePosterPath);
     }
 
     @Override
