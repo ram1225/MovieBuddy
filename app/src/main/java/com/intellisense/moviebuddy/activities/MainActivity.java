@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 
 import com.intellisense.moviebuddy.R;
@@ -14,6 +15,10 @@ import com.intellisense.moviebuddy.webservices.MoviesApiCall;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,10 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void initiateRetrofit() {
         MoviesApiCall moviesApiCall = MoviesApiCall.mRetrofit.create(MoviesApiCall.class);
-        Call<MovieItems> mCall = moviesApiCall.getMoviesList();
+        /*Observable<MovieItems> mCall = */
+
+                                                                        moviesApiCall.getMoviesList()
+                                                                        .subscribeOn(Schedulers.io())
+                                                                        .map(movieItems -> movieItems.getResults())
+                                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                                        .subscribe(resultsItems -> mMoviesListAdapter.setData(resultsItems),
+                                                                                                 throwable -> throwable.printStackTrace(),
+                                                                                                () -> {});
 
 
-        mCall.enqueue(new Callback<MovieItems>() {
+
+      /*
+      This is without RxJava2 for Retrofit asynchronous call
+
+      mCall.enqueue(new Callback<MovieItems>() {
             @Override
             public void onResponse(Call<MovieItems> call, Response<MovieItems> response) {
                 mMoviesListAdapter.setData(response.body().getResults());
@@ -54,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<MovieItems> call, Throwable t) {
                 t.printStackTrace();
             }
-        });
+        });*/
+
+      /*mCall.subscribeOn(Schedulers.newThread())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(MovieItems -> {
+                  Log.v("Test",MovieItems.getResults().toString());
+                  //mMoviesListAdapter.setData(ResultItem);
+              });*/
+
+        /*mCall.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())*/
+
     }
 }
