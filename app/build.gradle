@@ -2,55 +2,113 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     defaultConfig {
-        applicationId "com.intellisense.moviebuddy"
-        minSdkVersion 18
-        targetSdkVersion 25
+
+        applicationId rootProject.ext.androidApplicationId
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
+
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+
         release {
-            minifyEnabled false
+            useProguard true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
+
+    productFlavors {
+
+        mock {
+            //applicationId parent.ext.androidApplicationId + '.mock'
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
+        }
+
+        prod {
+            applicationIdSuffix = ".prod"
+            versionNameSuffix = "-prod"
+        }
+
+    }
+
+    //Stops creation of mockRelease
+
+    /*android.variantFilter { variant ->
+        if (variant.buildType.name.equals('release')
+                && variant.getFlavors().get(0).name.equals('mock')) {
+            variant.setIgnore(true);
+        }
+    }*/
+
+    /*sourceSets {
+
+        main { }
+
+        mock { }
+
+        prod { }
+
+    }*/
+
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
 
+    // android support libraries
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    // Bitmap and loading images
+    compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
 
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    // network
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
 
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
 
-    // butterknife
-    compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    // butterknife - code generator for view
+    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
-    compile 'io.reactivex.rxjava2:rxjava:2.0.6'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    // reactive
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
 
-    testCompile 'junit:junit:4.12'
+    // dependencies for local unit tests
+    testCompile "junit:junit:$rootProject.junitVersion"
+
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 
 }

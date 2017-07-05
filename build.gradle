@@ -24,3 +24,33 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// Define versions in a single place
+ext {
+
+    androidApplicationId = 'com.intellisense.moviebuddy'
+
+    // Sdk and tools
+    minSdkVersion = 18
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '26.0.0'
+
+    // App dependencies
+    supportLibraryVersion = '25.3.1'
+
+    picassoVersion = '2.5.2'
+
+    retrofitVersion = '2.3.0'
+    okHttpVersion = '3.8.1'
+
+    butterKnifeVersion = '8.6.0'
+
+    rxjava2Version = '2.1.0'
+    rxandroidVersion = '2.0.1'
+
+    //Test dependencies
+    junitVersion = '4.12'
+    espressoVersion = '2.2.2'
+
+}
