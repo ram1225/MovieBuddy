@@ -1,2 +1,2 @@
 # MovieBuddy
-Initial code commit
+Initial code commit - develop branch
